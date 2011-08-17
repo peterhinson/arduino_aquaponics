@@ -1,9 +1,9 @@
 #include "AnalogButtons.h"
 
 #define ANALOG_PIN         0
-#define NUM_TEMP_PROBES    4
+#define NUM_TEMP_PROBES    5
 
-enum { tbReadAll = 1, tbReadOne, tbReadTwo, tbReadThree, tbReadFour };
+enum { tbReadOne, tbReadTwo, tbReadThree, tbReadFour, tbReadFive };
 
 // Read a temperature probe and do something.
 void readTempProbe(int probe_id) {
@@ -18,22 +18,14 @@ void readTempProbe(int probe_id) {
 // Handle a keypad button press
 void handleButtons(int id, boolean held)
 {
-  switch (id)
-  {
-    case tbReadAll:
-      // Read all temperature probes and display results
-      if (held)
-        for (int probe = 0; probe < NUM_TEMP_PROBES; probe++)
-          readTempProbe(probe);      // Read a probe
-      break;
-      
-    default:
-      // Read a specific probe:
-      if (id > 1 && id-2 < NUM_TEMP_PROBES)
-        // If this is a valid temp probe button, read the probe.
-        readTempProbe(id-2);
-      break;
-  }
+  if (id > 0 && id-2 < NUM_TEMP_PROBES && !held)
+    // If this is a valid temp probe button, read the probe.
+    readTempProbe(id-2);
+  else if (id == 1 && held)
+    // If this is button one and it's held down...
+    for (int probe = 0; probe < NUM_TEMP_PROBES; probe++)
+      // Loop through all probes
+      readTempProbe(probe);
 }
 
 AnalogButtons analogButtons(ANALOG_PIN, 30, &handleButtons);
