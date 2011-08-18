@@ -1,3 +1,5 @@
+// rik checked the file out on 8/18/2011
+
 #include "AnalogButtons.h"
 
 #define ANALOG_PIN         0
